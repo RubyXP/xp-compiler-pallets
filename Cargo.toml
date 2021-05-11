@@ -1,11 +1,10 @@
 [package]
-authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+authors = ['Dmitry Bryuhanov <dmitrii_bryuhanov@mail.ru>']
 description = 'FRAME pallet template for defining custom runtime logic.'
 edition = '2018'
-homepage = 'https://substrate.dev'
+homepage = 'https://xp.network'
 license = 'Unlicense'
-name = 'pallet-template'
-repository = 'https://github.com/substrate-developer-hub/substrate-node-template/'
+name = 'solidity'
 version = '3.0.0'
 
 [package.metadata.docs.rs]
@@ -21,6 +20,11 @@ version = '2.0.0'
 [dependencies]
 frame-support = { default-features = false, version = '3.0.0' }
 frame-system = { default-features = false, version = '3.0.0' }
+sp-std = { default-features = false, version = '3.0.0' }
+sp-core = { default-features = false, version = '3.0.0' }
+serde = { version = "1.0.119"  }
+solidity-compiler = { git = "https://github.com/xp-network/solidity-compiler/" }
+hex = "0.4.3"
 
 [dev-dependencies]
 serde = { version = "1.0.119" }
@@ -33,5 +37,6 @@ default = ['std']
 std = [
     'codec/std',
     'frame-support/std',
+	'sp-std/std',
     'frame-system/std',
 ]
