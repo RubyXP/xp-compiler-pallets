@@ -4,7 +4,7 @@ description = 'FRAME pallet template for defining custom runtime logic.'
 edition = '2018'
 homepage = 'https://xp.network'
 license = 'Unlicense'
-name = 'solidity'
+name = 'solidity-compiler-pallet'
 version = '3.0.0'
 
 [package.metadata.docs.rs]
