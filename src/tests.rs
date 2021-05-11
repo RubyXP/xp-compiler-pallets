@@ -2,8 +2,7 @@ use crate as pallet_custom;
 use crate::*;
 
 use frame_support::{assert_ok, parameter_types, traits::GenesisBuild};
-use sp_core::{H256,H160};
-use sp_std::str::FromStr;
+use sp_core::{H256};
 use sp_runtime::{
     testing::Header,
     traits::{BlakeTwo256, IdentityLookup},
@@ -71,14 +70,27 @@ fn test_obj() -> sp_io::TestExternalities {
 }
 
 #[test]
+fn new_account_creation() {
+    test_obj().execute_with(|| {
+        assert_ok!(Custom::create_account(
+            Origin::signed(2),
+            0x1
+        ));
+        let script = String::from_utf8(<AccountsStore<Test>>::get(2).unwrap()).unwrap();
+        println!("{}", script);
+    });
+}
+
+#[test]
 fn transfer_money_test() {
     test_obj().execute_with(|| {
         assert_ok!(Custom::transfer_funds(
             Origin::signed(2),
-            H160::from_str("106Ca83003090c63B03d3fE3A9EE3B5E36C155CD").unwrap(),
-            0x32.into()
+            0x1,
+            0x32
         ));
-        let script = hex::encode(<AccountsStore<Test>>::get(2).unwrap());
+
+        let script = String::from_utf8(<AccountsStore<Test>>::get(2).unwrap()).unwrap();
         println!("{}", script);
     })
 }

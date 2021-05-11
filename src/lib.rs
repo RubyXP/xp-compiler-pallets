@@ -6,8 +6,8 @@ pub mod pallet {
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
     use sp_std::{convert::*, marker::PhantomData, str, vec::Vec};
-    use solidity_compiler::generators::Generator;
-    use sp_core::{H160, U256};
+    use move_compiler::generators::Generator;
+    use xp_compiler::XpCompiler;
 
     // Main pallet config
     #[pallet::config]
@@ -24,21 +24,41 @@ pub mod pallet {
     // TODO: Tweak weights
     #[pallet::call]
     impl<T: Config> Pallet<T> {
+        /// Create a new account with an initial currency
+        #[pallet::weight(50_000_000)]
+        pub(super) fn create_account(
+            origin: OriginFor<T>,
+            address: u128,
+        ) -> DispatchResultWithPostInfo {
+            let sender = ensure_signed(origin)?;
+
+            // Compile the script with our common interface
+            // create_account(address)
+            let res = Generator.create_account(&address.to_string()).unwrap();
+
+            // Save the script to store so that it can be retrieved
+            <AccountsStore<T>>::insert(&sender, res.as_bytes());
+
+            // Trigger event
+            Self::deposit_event(Event::AccountCreation(sender));
+
+            Ok(().into())
+        }
+
+
         /// Transfer funds from your account
         #[pallet::weight(70_000_000)]
         pub(super) fn transfer_funds(
             origin: OriginFor<T>,
-            receiver: H160,
-            amount: U256,
+            receiver: u128,
+            amount: u64,
         ) -> DispatchResultWithPostInfo {
             let sender = ensure_signed(origin)?;
 
             // transfer_amount(receiver, amount)
-            let mut amb: [u8; 32] = [0; 32];
-            amount.to_big_endian(&mut amb);
-            let call = Generator::payment_p2p_bytes(receiver.as_bytes(), &amb);
+            let res = Generator.transfer_amount(&receiver.to_string(), &amount.to_string()).unwrap();
 
-            <AccountsStore<T>>::insert(&sender, &call);
+            <AccountsStore<T>>::insert(&sender, res.as_bytes());
             Self::deposit_event(Event::TransferFund(sender, receiver, amount));
             Ok(().into())
         }
@@ -56,7 +76,8 @@ pub mod pallet {
     #[pallet::metadata(T::AccountId = "AccountId")]
     #[pallet::generate_deposit(pub (super) fn deposit_event)]
     pub enum Event<T: Config> {
-        TransferFund(T::AccountId, H160, U256), // AccountId, Currency Type, Receiver, Ammount
+        AccountCreation(T::AccountId),
+        TransferFund(T::AccountId, u128, u64), // AccountId, Receiver, Ammount
     }
 
     // Pallet hooks
