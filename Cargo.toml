@@ -24,7 +24,7 @@ sp-std = { default-features = false, version = '3.0.0' }
 sp-core = { default-features = false, version = '3.0.0' }
 serde = { version = "1.0.119"  }
 xp-compiler = { git = "https://github.com/xp-network/xp-compiler/", branch = "main" }
-move-compiler = { git = "https://github.com/xp-network/move-compiler/" }
+move-compiler = { git = "https://github.com/xp-network/move-compiler/", default-features = false }
 hex = "0.4.3"
 
 [dev-dependencies]
