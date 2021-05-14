@@ -11,9 +11,9 @@ version = '3.0.0'
 targets = ['x86_64-unknown-linux-gnu']
 
 [dependencies]
-serde = { version = "1.0.119"  }
-solidity-compiler = { git = "https://github.com/xp-network/solidity-compiler/" }
-hex = "0.4.3"
+serde = { version = "1.0.119", default-features = false, features = ["alloc", "derive"]  }
+solidity-compiler = { git = "https://github.com/xp-network/solidity-compiler/", default-features = false }
+hex = { version = "0.4.3", default-features = false }
 
 [features]
 default = ['std']
@@ -23,6 +23,9 @@ std = [
 	'sp-core/std',
 	'sp-std/std',
     'frame-system/std',
+	'solidity-compiler/std',
+	'hex/std',
+	'serde/std'
 ]
 
 [dependencies.sp-std]
