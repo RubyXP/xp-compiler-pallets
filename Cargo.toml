@@ -23,8 +23,8 @@ frame-system = { default-features = false, version = '3.0.0' }
 sp-std = { default-features = false, version = '3.0.0' }
 sp-core = { default-features = false, version = '3.0.0' }
 serde = { version = "1.0.119"  }
-solidity-compiler = { git = "https://github.com/xp-network/solidity-compiler/" }
-hex = "0.4.3"
+solidity-compiler = { git = "https://github.com/xp-network/solidity-compiler/", default-features = false }
+hex = { version = "0.4.3", default-features = false }
 
 [dev-dependencies]
 serde = { version = "1.0.119" }
@@ -39,4 +39,6 @@ std = [
     'frame-support/std',
 	'sp-std/std',
     'frame-system/std',
+	'solidity-compiler/std',
+	'hex/std'
 ]
